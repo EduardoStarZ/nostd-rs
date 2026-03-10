@@ -9,11 +9,32 @@ pub extern "C" fn _start() -> ! {
 
     println(msg);
 
+    sleep(5);
+
     exit();
 }
 
+pub fn sleep(time_as_nanos: u64) {
+    #[repr(C)]
+    struct time {
+        tv_sec: u64,
+        tv_nsec: u64
+    }
+
+    let time : time = time {tv_sec: time_as_nanos, tv_nsec: 0};
+    unsafe {
+        asm!(
+            "syscall",
+            in("rax") 35,
+            in("rdi") &time,
+            in("rsi") 0,
+            lateout("rax") _,
+        );
+    }
+}
+
 pub fn exit() -> ! {
-    unsafe{ 
+    unsafe { 
         asm!(
             "syscall",
             in("rax") 60,
