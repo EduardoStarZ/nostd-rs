@@ -9,8 +9,6 @@ pub extern "C" fn _start() -> ! {
 
     println(msg);
 
-    sleep(5);
-
     exit();
 }
 
@@ -62,6 +60,6 @@ pub fn println(st: &str) {
 }
 
 #[panic_handler]
-fn panic(_info: &core::panic::PanicInfo) -> ! { 
-    loop {}
+fn panic(info: &core::panic::PanicInfo) -> ! { 
+    exit();
 }
