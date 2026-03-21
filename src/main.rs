@@ -12,14 +12,14 @@ pub extern "C" fn _start() -> ! {
     exit();
 }
 
-pub fn sleep(time_as_nanos: u64) {
+pub fn sleep(seconds: u64, nanos: u64) {
     #[repr(C)]
     struct time {
         tv_sec: u64,
         tv_nsec: u64
     }
 
-    let time : time = time {tv_sec: time_as_nanos, tv_nsec: 0};
+    let time : time = time {tv_sec: nanos, tv_nsec: seconds};
     unsafe {
         asm!(
             "syscall",
@@ -60,6 +60,6 @@ pub fn println(st: &str) {
 }
 
 #[panic_handler]
-fn panic(info: &core::panic::PanicInfo) -> ! { 
+fn panic(_info: &core::panic::PanicInfo) -> ! { 
     exit();
 }
